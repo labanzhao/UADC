@@ -1,88 +1,38 @@
 # UCMT Medical Image Segmentation Training Code
 
-本项目包含多组基于 PyTorch 的医学图像分割训练脚本，主要用于半监督语义分割实验。代码支持 2D 医学图像分割数据集（如 ISIC、Kvasir-CVC）和 3D 医学图像分割数据集（如 LA 数据集），并包含 UCMT、Mean Teacher、DCT 分支、多模型协同训练等实验版本。
+This project contains PyTorch-based training scripts for semi-supervised medical image segmentation. It supports 2D medical image segmentation datasets such as ISIC and Kvasir-CVC, as well as 3D medical image segmentation datasets such as LA. The code includes multiple experimental settings, including UCMT, Mean Teacher, DCT-based training, and multi-model collaborative learning.
 
-> 注意：本 README 根据当前提供的 `train*.py` 训练脚本整理。由于部分路径、配置文件路径和数据路径在代码中为本地路径或占位路径，运行前需要根据自己的环境进行修改。
-
----
-
-## 1. 项目功能简介
-
-本项目主要实现以下功能：
-
-- 医学图像二分类分割训练；
-- 支持半监督学习场景，将训练集划分为有标签数据和无标签数据；
-- 支持 2D 图像分割任务，例如 ISIC 皮肤病灶分割、Kvasir-CVC 息肉分割；
-- 支持 3D 图像分割任务，例如 LA 数据集；
-- 支持 DeepLabv3+、UNet、VNet 等分割网络；
-- 支持 Mean Teacher / UCMT / 多模型协同训练框架；
-- 支持 CutMix / BoxMask 数据增强；
-- 支持 DCT 频域增强或 DCT 分支训练；
-- 支持 TensorBoard 日志记录和模型权重保存。
+> This README should be placed in the project root directory as:
+>
+> ```text
+> UCMT-main/README.md
+> ```
 
 ---
 
-## 2. 代码文件说明
+## 1. Project Overview
 
-| 文件名 | 主要用途 |
-|---|---|
-| `train.py` | 2D ISIC 半监督分割训练主脚本，包含多模型 / DCT / UCMT 相关训练逻辑。 |
-| `train1.py` | `train.py` 的实验变体，主要用于 2D ISIC 类数据训练。 |
-| `train_ucmt_isic.py` | 面向 ISIC 数据集的 UCMT 训练脚本。 |
-| `train_UCMT.py` | 面向 Kvasir-CVC / 息肉数据的 UCMT 训练脚本，使用 `image_root` 和 `gt_root`。 |
-| `train_kvasir_cvc.py` | Kvasir-CVC 息肉图像分割训练脚本，包含 DCT / 多模型配置。 |
-| `train1_kvasir_cvc.py` | Kvasir-CVC 训练的另一实验版本。 |
-| `train1_UADC.py` | UADC 相关训练实验脚本。 |
-| `train_meanteacher.py` | Mean Teacher 半监督训练脚本。 |
-| `train_3d.py` | 3D 医学图像半监督分割训练脚本，默认使用 VNet。 |
-| `train_3d_6model.py` | 3D 多模型训练实验脚本。 |
-| `train_piture.py` | 图像实验 / 可视化相关训练变体，文件名可能应为 `train_picture.py`。 |
+The project supports:
+
+- Binary medical image segmentation;
+- Semi-supervised learning with labeled and unlabeled data;
+- 2D segmentation tasks, including ISIC skin lesion segmentation and Kvasir-CVC polyp segmentation;
+- 3D segmentation tasks, including LA dataset segmentation;
+- Segmentation backbones such as DeepLabv3+, UNet, and VNet;
+- UCMT, Mean Teacher, and multi-model collaborative training;
+- CutMix / BoxMask data augmentation;
+- DCT-based frequency-domain enhancement or DCT branch training;
+- TensorBoard logging and model checkpoint saving.
 
 ---
 
-## 3. 环境依赖
+## 2. Recommended Project Structure
 
-建议使用 Linux + NVIDIA GPU 环境运行。
-
-### 3.1 基础环境
-
-```bash
-python >= 3.8
-CUDA >= 11.x
-PyTorch >= 1.10
-```
-
-### 3.2 Python 依赖
-
-根据代码中的 import，建议安装以下依赖：
-
-```bash
-pip install torch torchvision torchaudio
-pip install numpy pandas matplotlib tqdm easydict pyyaml opencv-python tensorboard
-pip install unfoldNd
-```
-
-如果使用分布式训练或特定模型结构，还需要保证项目中的以下模块存在：
-
-```text
-data/
-dataset/
-models/
-model/
-utils/
-util/
-supervised.py
-supervised_dct.py
-```
-
----
-
-## 4. 项目目录建议
-
-建议将项目组织为如下结构：
+Please place this README in the project root directory:
 
 ```text
 UCMT-main/
+├── README.md
 ├── configs/
 │   └── pascal/
 │       ├── segformerb2_4x4.yaml
@@ -103,20 +53,80 @@ UCMT-main/
 ├── util/
 ├── utils/
 ├── train.py
+├── train1.py
 ├── train_ucmt_isic.py
+├── train_UCMT.py
 ├── train_kvasir_cvc.py
+├── train1_kvasir_cvc.py
+├── train1_UADC.py
 ├── train_meanteacher.py
 ├── train_3d.py
-└── README.md
+├── train_3d_6model.py
+└── train_piture.py
 ```
 
 ---
 
-## 5. 数据准备
+## 3. File Description
 
-### 5.1 ISIC 数据集格式
+| File | Description |
+|---|---|
+| `train.py` | Main 2D ISIC semi-supervised segmentation training script. It contains UCMT, DCT, and multi-model related training logic. |
+| `train1.py` | Experimental variant of `train.py`, mainly used for 2D ISIC-like datasets. |
+| `train_ucmt_isic.py` | UCMT training script for the ISIC dataset. |
+| `train_UCMT.py` | UCMT training script for Kvasir-CVC / polyp segmentation datasets. |
+| `train_kvasir_cvc.py` | Kvasir-CVC polyp segmentation training script with DCT and multi-model configurations. |
+| `train1_kvasir_cvc.py` | Another experimental training script for Kvasir-CVC. |
+| `train1_UADC.py` | Training script for UADC-related experiments. |
+| `train_meanteacher.py` | Mean Teacher semi-supervised training script. |
+| `train_3d.py` | 3D medical image segmentation training script using VNet by default. |
+| `train_3d_6model.py` | 3D multi-model collaborative training script. |
+| `train_piture.py` | Image experiment or visualization-related training variant. The intended name may be `train_picture.py`. |
 
-适用于以下脚本：
+---
+
+## 4. Environment Requirements
+
+A Linux system with an NVIDIA GPU is recommended.
+
+### 4.1 Basic Environment
+
+```bash
+python >= 3.8
+CUDA >= 11.x
+PyTorch >= 1.10
+```
+
+### 4.2 Python Dependencies
+
+Install the main dependencies:
+
+```bash
+pip install torch torchvision torchaudio
+pip install numpy pandas matplotlib tqdm easydict pyyaml opencv-python tensorboard
+pip install unfoldNd
+```
+
+The following project modules should also exist:
+
+```text
+data/
+dataset/
+models/
+model/
+utils/
+util/
+supervised.py
+supervised_dct.py
+```
+
+---
+
+## 5. Dataset Preparation
+
+### 5.1 ISIC Dataset
+
+Applicable scripts:
 
 ```text
 train.py
@@ -127,13 +137,13 @@ train_piture.py
 train1_UADC.py
 ```
 
-这些脚本通常使用参数：
+These scripts usually use:
 
 ```bash
 --data_path YOUR_DATA_PATH
 ```
 
-建议数据目录结构如下：
+Recommended dataset structure:
 
 ```text
 YOUR_DATA_PATH/
@@ -148,11 +158,11 @@ YOUR_DATA_PATH/
     └── mask/
 ```
 
-具体目录名称需要与 `data/dataset.py` 中的 `ISICDataset` 实现保持一致。
+The actual folder names must match the implementation of `ISICDataset` in `data/dataset.py`.
 
-### 5.2 Kvasir-CVC 数据集格式
+### 5.2 Kvasir-CVC Dataset
 
-适用于以下脚本：
+Applicable scripts:
 
 ```text
 train_kvasir_cvc.py
@@ -160,14 +170,14 @@ train1_kvasir_cvc.py
 train_UCMT.py
 ```
 
-这些脚本通常使用参数：
+These scripts usually use:
 
 ```bash
 --image_root PATH_TO_IMAGES
 --gt_root PATH_TO_MASKS
 ```
 
-建议目录结构如下：
+Recommended dataset structure:
 
 ```text
 TrainDataset_cvc_kvasir/
@@ -179,173 +189,125 @@ TrainDataset_cvc_kvasir/
     └── ...
 ```
 
-示例：
+### 5.3 3D LA Dataset
 
-```bash
-python train_kvasir_cvc.py \
-  --image_root ./dataset/TrainDataset_cvc_kvasir/image/ \
-  --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/ \
-  --labeled_percentage 0.15
-```
-
-### 5.3 3D LA 数据集格式
-
-适用于：
+Applicable scripts:
 
 ```text
 train_3d.py
 train_3d_6model.py
 ```
 
-这些脚本使用：
+These scripts usually use:
 
 ```bash
 --data_path YOUR_3D_DATA_PATH
 ```
 
-默认 3D 输入尺寸为：
+The default 3D input size is:
 
 ```text
 [80, 112, 112]
 ```
 
-对应参数：
-
-```bash
---image_size [80,112,112]
-```
-
-具体数据读取方式由 `data/dataset_3d.py` 中的 `LADataset` 决定。
+The exact loading process depends on `LADataset` in `data/dataset_3d.py`.
 
 ---
 
-## 6. 快速开始
+## 6. Quick Start
 
-### 6.1 训练 ISIC 数据集
+### 6.1 Train on ISIC
 
 ```bash
-python train_ucmt_isic.py \
-  --data_path ./dataset/ISIC/ \
-  --backbone DeepLabv3p \
-  --image_size 256 \
-  --labeled_percentage 0.1 \
-  --num_epochs 25 \
-  --batch_size 4 \
-  --learning_rate 1e-4
+python train_ucmt_isic.py   --data_path ./dataset/ISIC/   --backbone DeepLabv3p   --image_size 256   --labeled_percentage 0.1   --num_epochs 25   --batch_size 4   --learning_rate 1e-4
 ```
 
-或者使用主训练脚本：
+Or use the main training script:
 
 ```bash
-python train.py \
-  --data_path ./dataset/ISIC/ \
-  --config ./configs/pascal/segformerb2_4x4.yaml \
-  --config2 ./configs/pascal/r50_dct_4x4.yaml \
-  --config3 ./configs/pascal/r50_4x4.yaml
+python train.py   --data_path ./dataset/ISIC/   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
 ```
 
-### 6.2 训练 Kvasir-CVC 数据集
+### 6.2 Train on Kvasir-CVC
 
 ```bash
-python train_kvasir_cvc.py \
-  --image_root ./dataset/TrainDataset_cvc_kvasir/image/ \
-  --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/ \
-  --backbone DeepLabv3p \
-  --image_size 256 \
-  --labeled_percentage 0.15 \
-  --num_epochs 25 \
-  --batch_size 4 \
-  --learning_rate 5e-4 \
-  --config ./configs/pascal/segformerb2_4x4.yaml \
-  --config2 ./configs/pascal/r50_dct_4x4.yaml \
-  --config3 ./configs/pascal/r50_4x4.yaml
+python train_kvasir_cvc.py   --image_root ./dataset/TrainDataset_cvc_kvasir/image/   --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/   --backbone DeepLabv3p   --image_size 256   --labeled_percentage 0.15   --num_epochs 25   --batch_size 4   --learning_rate 5e-4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
 ```
 
-### 6.3 训练 3D LA 数据集
+### 6.3 Train on 3D LA
 
 ```bash
-python train_3d.py \
-  --data_path ./dataset/LA/ \
-  --backbone VNet \
-  --labeled_percentage 0.1 \
-  --num_epochs 1000 \
-  --batch_size 4 \
-  --learning_rate 1e-4
+python train_3d.py   --data_path ./dataset/LA/   --backbone VNet   --labeled_percentage 0.1   --num_epochs 1000   --batch_size 4   --learning_rate 1e-4
 ```
 
-### 6.4 运行 Mean Teacher
+### 6.4 Run Mean Teacher Training
 
 ```bash
-python train_meanteacher.py \
-  --data_path ./dataset/ISIC/ \
-  --backbone DeepLabv3p \
-  --labeled_percentage 0.05 \
-  --num_epochs 25 \
-  --batch_size 4
+python train_meanteacher.py   --data_path ./dataset/ISIC/   --backbone DeepLabv3p   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4
 ```
 
 ---
 
-## 7. 常用参数说明
+## 7. Common Parameters
 
-| 参数 | 默认值 | 说明 |
+| Parameter | Default Value | Description |
 |---|---:|---|
-| `--seed` | `1` | 随机种子。 |
-| `--project` | `./runs/UCMT` | 实验结果保存路径。 |
-| `--backbone` | `DeepLabv3p` / `VNet` | 分割网络骨干。2D 脚本多为 `DeepLabv3p`，3D 脚本为 `VNet`。 |
-| `--data_path` | `YOUR_DATA_PATH` | ISIC 或 3D 数据集路径。 |
-| `--image_root` | `YOUR_DATA_PATH` | Kvasir-CVC 图像路径。 |
-| `--gt_root` | `YOUR_DATA_PATH` | Kvasir-CVC 标签路径。 |
-| `--image_size` | `256` 或 `[80,112,112]` | 输入图像大小。2D 为单个整数，3D 为三维尺寸。 |
-| `--labeled_percentage` | `0.05` / `0.1` / `0.15` / `0.3` | 有标签数据比例。 |
-| `--is_cutmix` | `False` | 是否启用 CutMix / BoxMask。 |
-| `--mix_prob` | `0.5` | 幅度混合或增强概率。 |
-| `--topk` | `1` 或 `2` | 选择 top-k 预测或不确定性区域时使用。 |
-| `--num_epochs` | `25` / `50` / `1000` | 训练轮数。 |
-| `--batch_size` | `4` | 批大小。 |
-| `--num_workers` | `2` | DataLoader 线程数。 |
-| `--in_channels` | `3` 或 `1` | 输入通道数。2D RGB 为 3，3D 灰度为 1。 |
-| `--num_classes` | `2` | 分类类别数，默认二分类分割。 |
-| `--pretrained` | `True` | 是否使用预训练权重。 |
-| `--learning_rate` | `1e-4` / `5e-4` | 学习率。 |
-| `--config` | YAML 路径 | 第一组模型配置文件。 |
-| `--config2` | YAML 路径 | DCT 或第二模型配置文件。 |
-| `--config3` | YAML 路径 | 第三模型配置文件。 |
-| `--thr` | `0.95` | 伪标签置信度阈值。 |
-| `--uw` | `1.0` | 无监督损失权重。 |
-| `--amp` | `False` | 是否启用自动混合精度训练。 |
+| `--seed` | `1` | Random seed. |
+| `--project` | `./runs/UCMT` | Path for saving experiment results. |
+| `--backbone` | `DeepLabv3p` / `VNet` | Segmentation backbone. |
+| `--data_path` | `YOUR_DATA_PATH` | Path to the ISIC or 3D dataset. |
+| `--image_root` | `YOUR_DATA_PATH` | Image path for Kvasir-CVC. |
+| `--gt_root` | `YOUR_DATA_PATH` | Ground-truth mask path for Kvasir-CVC. |
+| `--image_size` | `256` or `[80,112,112]` | Input image or volume size. |
+| `--labeled_percentage` | `0.05`, `0.1`, `0.15`, `0.3` | Percentage of labeled data. |
+| `--is_cutmix` | `False` | Whether to enable CutMix / BoxMask. |
+| `--mix_prob` | `0.5` | Probability for amplitude mixing or augmentation. |
+| `--topk` | `1` or `2` | Top-k selection setting. |
+| `--num_epochs` | `25`, `50`, `1000` | Number of training epochs. |
+| `--batch_size` | `4` | Batch size. |
+| `--num_workers` | `2` | Number of DataLoader workers. |
+| `--in_channels` | `3` or `1` | Input channels. 2D RGB images use 3 channels; 3D volumes usually use 1 channel. |
+| `--num_classes` | `2` | Number of segmentation classes. |
+| `--pretrained` | `True` | Whether to use pretrained weights. |
+| `--learning_rate` | `1e-4` or `5e-4` | Learning rate. |
+| `--config` | YAML path | Configuration file for the first model. |
+| `--config2` | YAML path | Configuration file for the DCT branch or second model. |
+| `--config3` | YAML path | Configuration file for the third model. |
+| `--thr` | `0.95` | Confidence threshold for pseudo-labels. |
+| `--uw` | `1.0` | Weight of the unsupervised loss. |
+| `--amp` | `False` | Whether to enable automatic mixed precision training. |
 
 ---
 
-## 8. 训练流程说明
+## 8. Training Pipeline
 
-整体训练流程如下：
+The general training pipeline is:
 
-1. 读取命令行参数；
-2. 设置随机种子；
-3. 创建实验保存目录；
-4. 加载训练集和验证集；
-5. 按 `labeled_percentage` 划分有标签数据和无标签数据；
-6. 将有标签数据重复采样，使其长度接近或等于训练集长度；
-7. 构建 DataLoader；
-8. 初始化分割模型；
-9. 定义 Dice / DSC 损失函数；
-10. 定义优化器，例如 AdamW 或 SGD；
-11. 进行监督损失、无监督一致性损失、伪标签损失或 DCT 分支损失训练；
-12. 使用 TensorBoard 和日志文件记录训练过程；
-13. 保存 `best.pth`、`last.pth` 或多模型权重。
+1. Parse command-line arguments;
+2. Set the random seed;
+3. Create experiment directories;
+4. Load training and validation datasets;
+5. Split the training data into labeled and unlabeled subsets according to `labeled_percentage`;
+6. Repeat the labeled subset so that its length is close to or equal to the full training set;
+7. Build DataLoaders;
+8. Initialize segmentation models;
+9. Define Dice / DSC loss functions;
+10. Define optimizers such as AdamW or SGD;
+11. Train with supervised loss, unsupervised consistency loss, pseudo-label loss, or DCT branch loss;
+12. Record training logs using TensorBoard and log files;
+13. Save model checkpoints.
 
 ---
 
-## 9. 输出结果
+## 9. Output Results
 
-训练完成后，结果默认保存在：
+By default, training results are saved in:
 
 ```text
 runs/UCMT_<backbone>_label_<labeled_percentage>/
 ```
 
-目录中通常包含：
+The directory usually contains:
 
 ```text
 runs/UCMT_DeepLabv3p_label_0.1/
@@ -362,7 +324,7 @@ runs/UCMT_DeepLabv3p_label_0.1/
     └── model3_last.pth
 ```
 
-不同脚本保存的权重名称可能不同，例如：
+Different scripts may save checkpoints with different names, such as:
 
 - `best.pth`
 - `last.pth`
@@ -375,21 +337,21 @@ runs/UCMT_DeepLabv3p_label_0.1/
 
 ---
 
-## 10. 使用 TensorBoard 查看日志
+## 10. View Logs with TensorBoard
 
-训练时脚本会创建 TensorBoard 日志目录：
+During training, the scripts create a TensorBoard log directory:
 
 ```text
 runs/UCMT_xxx/tensorboardxxx/
 ```
 
-查看方式：
+Run:
 
 ```bash
 tensorboard --logdir ./runs
 ```
 
-然后在浏览器中打开：
+Then open:
 
 ```text
 http://localhost:6006
@@ -397,37 +359,37 @@ http://localhost:6006
 
 ---
 
-## 11. 注意事项
+## 11. Important Notes
 
-### 11.1 修改 GPU 设置
+### 11.1 GPU Settings
 
-多个脚本中固定设置了：
+Several scripts contain:
 
 ```python
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 ```
 
-如果需要使用其他 GPU，请修改为：
+To use another GPU, modify it, for example:
 
 ```python
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 ```
 
-或者删除该行，在命令行中指定：
+Alternatively, remove that line and specify the GPU from the command line:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python train.py
 ```
 
-### 11.2 修改配置文件路径
+### 11.2 Configuration File Paths
 
-部分脚本中默认配置文件路径为本地绝对路径，例如：
+Some scripts contain local absolute paths, for example:
 
 ```text
 /home/li/桌面/UCMT-main/configs/pascal/segformerb2_4x4.yaml
 ```
 
-运行前应改为当前项目中的相对路径：
+Replace them with relative paths:
 
 ```bash
 --config ./configs/pascal/segformerb2_4x4.yaml
@@ -435,163 +397,140 @@ CUDA_VISIBLE_DEVICES=0 python train.py
 --config3 ./configs/pascal/r50_4x4.yaml
 ```
 
-### 11.3 数据集类需要对应
+### 11.3 Dataset Classes
 
-不同脚本调用的数据集类不同：
+Different scripts call different dataset classes:
 
 ```text
 ISICDataset      -> data/dataset.py
 LADataset        -> data/dataset_3d.py
-Polyp loader     -> data/split.py 或相关 loader
+Polyp loader     -> data/split.py or related loader
 SemiDataset      -> dataset/semi.py
 SemiDatasetDCT   -> dataset/semi_dct.py
 ```
 
-请确保数据路径、文件名、图像格式与对应 Dataset 类中的读取逻辑一致。
+Make sure dataset paths, file names, and image formats match the corresponding Dataset implementation.
 
-### 11.4 有标签比例
+### 11.4 Labeled Data Percentage
 
-`labeled_percentage` 控制半监督训练中有标签数据的比例。例如：
+`labeled_percentage` controls the proportion of labeled samples used in semi-supervised training.
+
+For example:
 
 ```bash
 --labeled_percentage 0.05
 ```
 
-表示只使用 5% 训练数据作为有标签样本，其余样本用于无标签训练。
+This means that only 5% of the training data is used as labeled data, while the remaining data is used as unlabeled data.
 
 ---
 
-## 12. 示例实验命令
+## 12. Example Experiment Commands
 
-### ISIC 5% 标签实验
+### ISIC with 5% Labels
 
 ```bash
-python train.py \
-  --data_path ./dataset/ISIC/ \
-  --labeled_percentage 0.05 \
-  --num_epochs 25 \
-  --batch_size 4 \
-  --learning_rate 5e-4 \
-  --config ./configs/pascal/segformerb2_4x4.yaml \
-  --config2 ./configs/pascal/r50_dct_4x4.yaml \
-  --config3 ./configs/pascal/r50_4x4.yaml
+python train.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4   --learning_rate 5e-4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
 ```
 
-### ISIC 10% 标签实验
+### ISIC with 10% Labels
 
 ```bash
-python train_ucmt_isic.py \
-  --data_path ./dataset/ISIC/ \
-  --labeled_percentage 0.1 \
-  --num_epochs 25 \
-  --batch_size 4
+python train_ucmt_isic.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.1   --num_epochs 25   --batch_size 4
 ```
 
-### Kvasir-CVC 15% 标签实验
+### Kvasir-CVC with 15% Labels
 
 ```bash
-python train_kvasir_cvc.py \
-  --image_root ./dataset/TrainDataset_cvc_kvasir/image/ \
-  --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/ \
-  --labeled_percentage 0.15 \
-  --num_epochs 25 \
-  --batch_size 4 \
-  --config ./configs/pascal/segformerb2_4x4.yaml \
-  --config2 ./configs/pascal/r50_dct_4x4.yaml \
-  --config3 ./configs/pascal/r50_4x4.yaml
+python train_kvasir_cvc.py   --image_root ./dataset/TrainDataset_cvc_kvasir/image/   --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/   --labeled_percentage 0.15   --num_epochs 25   --batch_size 4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
 ```
 
-### 3D LA 10% 标签实验
+### 3D LA with 10% Labels
 
 ```bash
-python train_3d.py \
-  --data_path ./dataset/LA/ \
-  --labeled_percentage 0.1 \
-  --num_epochs 1000 \
-  --batch_size 4
+python train_3d.py   --data_path ./dataset/LA/   --labeled_percentage 0.1   --num_epochs 1000   --batch_size 4
 ```
 
 ---
 
-## 13. 常见问题
+## 13. FAQ
 
-### Q1: 报错找不到配置文件怎么办？
+### Q1: What should I do if the configuration file cannot be found?
 
-请检查 `--config`、`--config2`、`--config3` 是否为当前机器上的真实路径。建议使用相对路径，不要使用原作者机器上的绝对路径。
+Check whether `--config`, `--config2`, and `--config3` point to valid paths on your machine. Relative paths are recommended.
 
-### Q2: 报错找不到数据怎么办？
+### Q2: What should I do if the dataset cannot be found?
 
-请检查：
+Check:
 
-- `--data_path` 是否正确；
-- `--image_root` 是否指向图像文件夹；
-- `--gt_root` 是否指向标签文件夹；
-- 图像和标签文件名是否一一对应；
-- Dataset 类中要求的目录名称是否与实际目录一致。
+- Whether `--data_path` is correct;
+- Whether `--image_root` points to the image folder;
+- Whether `--gt_root` points to the mask folder;
+- Whether image and mask file names correspond to each other;
+- Whether the folder names match the requirements in the Dataset class.
 
-### Q3: 显存不足怎么办？
+### Q3: What should I do if GPU memory is insufficient?
 
-可以尝试：
+Reduce the batch size:
 
 ```bash
 --batch_size 2
 ```
 
-或者减小输入尺寸：
+Or reduce the input image size:
 
 ```bash
 --image_size 224
 ```
 
-3D 任务也可以减小：
+For 3D tasks, reduce the volume size:
 
 ```bash
 --image_size [64,96,96]
 ```
 
-### Q4: 如何更换 GPU？
+### Q4: How can I change the GPU?
 
-命令行指定：
+Use:
 
 ```bash
 CUDA_VISIBLE_DEVICES=1 python train.py
 ```
 
-或修改脚本中的：
+Or modify:
 
 ```python
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 ```
 
-### Q5: 如何继续训练？
+### Q5: How can I resume training?
 
-当前脚本中主要是从头训练并保存权重。如果需要断点续训，可以在脚本中添加：
+The current scripts mainly train from scratch and save checkpoints. To resume training, add code similar to:
 
 ```python
 checkpoint = torch.load("./runs/xxx/weights/last.pth")
 model.load_state_dict(checkpoint)
 ```
 
-然后继续执行训练。
+Then continue training.
 
 ---
 
 ## 14. Citation / Acknowledgement
 
-如果本项目用于论文实验，请在论文或报告中说明使用了半监督医学图像分割框架，并注明所使用的数据集、标签比例、网络结构和训练配置。
+If this project is used for paper experiments, please describe the semi-supervised medical image segmentation framework in your paper or report. Also specify the dataset, labeled data percentage, network architecture, and training configuration used in the experiments.
 
 ---
 
 ## 15. TODO
 
-后续可以进一步完善：
+Future improvements may include:
 
-- 添加统一的 `requirements.txt`；
-- 添加统一的 `config.yaml`；
-- 整合多个重复训练脚本；
-- 增加测试脚本 `test.py`；
-- 增加模型推理脚本 `inference.py`；
-- 增加数据集划分脚本；
-- 增加自动保存训练指标为 CSV 的功能；
-- 修正 `train_piture.py` 文件名为 `train_picture.py`。
-
+- Add a unified `requirements.txt`;
+- Add a unified `config.yaml`;
+- Merge duplicate training scripts;
+- Add a testing script `test.py`;
+- Add an inference script `inference.py`;
+- Add a dataset splitting script;
+- Add automatic training metric saving as CSV files;
+- Rename `train_piture.py` to `train_picture.py`.
