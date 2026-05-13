@@ -26,7 +26,7 @@ The project supports:
 
 ---
 
-## 2. Recommended Project Structure
+## 2. Project Structure
 
 Please place this README in the project root directory:
 
