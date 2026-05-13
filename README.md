@@ -1,95 +1,56 @@
-# UCMT Medical Image Segmentation Training Code
+# UDAC Medical Image Segmentation Training Code
 
-This project contains PyTorch-based training scripts for semi-supervised medical image segmentation. It supports 2D medical image segmentation datasets such as ISIC and Kvasir-CVC, as well as 3D medical image segmentation datasets such as LA. The code includes multiple experimental settings, including UCMT, Mean Teacher, DCT-based training, and multi-model collaborative learning.
+This repository contains PyTorch-based training scripts for semi-supervised medical image segmentation. The project is designed for UDAC-related experiments and includes several training variants based on UCMT, Mean Teacher, DCT-based learning, and multi-model collaborative training.
 
-> This README should be placed in the project root directory as:
->
-> ```text
-> UCMT-main/README.md
-> ```
+All scripts are assumed to be placed in the same project folder. Therefore, this README describes how to run the code directly from the current folder without requiring an additional recommended directory structure.
 
 ---
 
 ## 1. Project Overview
 
-The project supports:
+This project focuses on semi-supervised medical image segmentation. It supports both 2D and 3D segmentation experiments.
+
+The main functions include:
 
 - Binary medical image segmentation;
-- Semi-supervised learning with labeled and unlabeled data;
-- 2D segmentation tasks, including ISIC skin lesion segmentation and Kvasir-CVC polyp segmentation;
-- 3D segmentation tasks, including LA dataset segmentation;
-- Segmentation backbones such as DeepLabv3+, UNet, and VNet;
-- UCMT, Mean Teacher, and multi-model collaborative training;
+- Semi-supervised training with labeled and unlabeled data;
+- 2D medical image segmentation, such as ISIC skin lesion segmentation and Kvasir-CVC polyp segmentation;
+- 3D medical image segmentation, such as LA dataset segmentation;
+- Segmentation backbones including DeepLabv3+, UNet, and VNet;
+- UDAC / UCMT-style collaborative training;
+- Mean Teacher semi-supervised learning;
+- DCT-based frequency-domain learning;
 - CutMix / BoxMask data augmentation;
-- DCT-based frequency-domain enhancement or DCT branch training;
-- TensorBoard logging and model checkpoint saving.
+- TensorBoard logging;
+- Model checkpoint saving.
 
 ---
 
-## 2. Project Structure
+## 2. Code Files
 
-Please place this README in the project root directory:
-
-```text
-UCMT-main/
-├── README.md
-├── configs/
-│   └── pascal/
-│       ├── segformerb2_4x4.yaml
-│       ├── r50_dct_4x4.yaml
-│       └── r50_4x4.yaml
-├── data/
-│   ├── dataset.py
-│   ├── dataset_3d.py
-│   └── split.py
-├── dataset/
-│   ├── semi.py
-│   ├── semi_dct.py
-│   └── dct_transform.py
-├── model/
-│   └── semseg/
-├── models/
-│   └── deeplabv3.py
-├── util/
-├── utils/
-├── train.py
-├── train1.py
-├── train_ucmt_isic.py
-├── train_UCMT.py
-├── train_kvasir_cvc.py
-├── train1_kvasir_cvc.py
-├── train1_UADC.py
-├── train_meanteacher.py
-├── train_3d.py
-├── train_3d_6model.py
-└── train_piture.py
-```
-
----
-
-## 3. File Description
+The main training files are listed below.
 
 | File | Description |
 |---|---|
-| `train.py` | Main 2D ISIC semi-supervised segmentation training script. It contains UCMT, DCT, and multi-model related training logic. |
-| `train1.py` | Experimental variant of `train.py`, mainly used for 2D ISIC-like datasets. |
-| `train_ucmt_isic.py` | UCMT training script for the ISIC dataset. |
-| `train_UCMT.py` | UCMT training script for Kvasir-CVC / polyp segmentation datasets. |
-| `train_kvasir_cvc.py` | Kvasir-CVC polyp segmentation training script with DCT and multi-model configurations. |
-| `train1_kvasir_cvc.py` | Another experimental training script for Kvasir-CVC. |
-| `train1_UADC.py` | Training script for UADC-related experiments. |
+| `train.py` | Main 2D semi-supervised segmentation training script. It contains UCMT / DCT / multi-model related training logic. |
+| `train1.py` | Experimental variant of the main 2D training script. |
+| `train1_UADC.py` | UDAC-related training script. This file can be used as the main script for UDAC experiments. |
+| `train_ucmt_isic.py` | UCMT training script for ISIC-style datasets. |
+| `train_UCMT.py` | UCMT training script for polyp segmentation datasets such as Kvasir-CVC. |
+| `train_kvasir_cvc.py` | Training script for Kvasir-CVC polyp segmentation. |
+| `train1_kvasir_cvc.py` | Another experimental Kvasir-CVC training script. |
 | `train_meanteacher.py` | Mean Teacher semi-supervised training script. |
 | `train_3d.py` | 3D medical image segmentation training script using VNet by default. |
 | `train_3d_6model.py` | 3D multi-model collaborative training script. |
-| `train_piture.py` | Image experiment or visualization-related training variant. The intended name may be `train_picture.py`. |
+| `train_piture.py` | Image experiment or visualization-related training variant. The file name may be intended as `train_picture.py`. |
 
 ---
 
-## 4. Environment Requirements
+## 3. Environment Requirements
 
 A Linux system with an NVIDIA GPU is recommended.
 
-### 4.1 Basic Environment
+### 3.1 Basic Environment
 
 ```bash
 python >= 3.8
@@ -97,9 +58,9 @@ CUDA >= 11.x
 PyTorch >= 1.10
 ```
 
-### 4.2 Python Dependencies
+### 3.2 Python Dependencies
 
-Install the main dependencies:
+Install the required Python packages:
 
 ```bash
 pip install torch torchvision torchaudio
@@ -107,7 +68,7 @@ pip install numpy pandas matplotlib tqdm easydict pyyaml opencv-python tensorboa
 pip install unfoldNd
 ```
 
-The following project modules should also exist:
+Depending on the specific script, the following local modules should also be available in the same project folder or accessible by Python:
 
 ```text
 data/
@@ -122,19 +83,21 @@ supervised_dct.py
 
 ---
 
-## 5. Dataset Preparation
+## 4. Dataset Preparation
 
-### 5.1 ISIC Dataset
+The scripts support different dataset formats depending on the experiment.
 
-Applicable scripts:
+### 4.1 ISIC / 2D Medical Image Dataset
+
+Applicable scripts include:
 
 ```text
 train.py
 train1.py
+train1_UADC.py
 train_ucmt_isic.py
 train_meanteacher.py
 train_piture.py
-train1_UADC.py
 ```
 
 These scripts usually use:
@@ -143,7 +106,7 @@ These scripts usually use:
 --data_path YOUR_DATA_PATH
 ```
 
-Recommended dataset structure:
+A common dataset format is:
 
 ```text
 YOUR_DATA_PATH/
@@ -158,11 +121,11 @@ YOUR_DATA_PATH/
     └── mask/
 ```
 
-The actual folder names must match the implementation of `ISICDataset` in `data/dataset.py`.
+The actual folder names should match the implementation of `ISICDataset` in `data/dataset.py`.
 
-### 5.2 Kvasir-CVC Dataset
+### 4.2 Kvasir-CVC Dataset
 
-Applicable scripts:
+Applicable scripts include:
 
 ```text
 train_kvasir_cvc.py
@@ -177,7 +140,7 @@ These scripts usually use:
 --gt_root PATH_TO_MASKS
 ```
 
-Recommended dataset structure:
+A common dataset format is:
 
 ```text
 TrainDataset_cvc_kvasir/
@@ -189,9 +152,9 @@ TrainDataset_cvc_kvasir/
     └── ...
 ```
 
-### 5.3 3D LA Dataset
+### 4.3 3D LA Dataset
 
-Applicable scripts:
+Applicable scripts include:
 
 ```text
 train_3d.py
@@ -210,63 +173,71 @@ The default 3D input size is:
 [80, 112, 112]
 ```
 
-The exact loading process depends on `LADataset` in `data/dataset_3d.py`.
+The actual data loading process depends on the implementation of `LADataset` in `data/dataset_3d.py`.
 
 ---
 
-## 6. Quick Start
+## 5. Quick Start
 
-### 6.1 Train on ISIC
+All commands can be executed directly in the current project folder.
+
+### 5.1 Run UDAC Training
+
+```bash
+python train1_UADC.py   --data_path ./dataset/ISIC/   --backbone DeepLabv3p   --image_size 256   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4   --learning_rate 5e-4
+```
+
+### 5.2 Run Main 2D Training
+
+```bash
+python train.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4   --learning_rate 5e-4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
+```
+
+### 5.3 Run UCMT on ISIC
 
 ```bash
 python train_ucmt_isic.py   --data_path ./dataset/ISIC/   --backbone DeepLabv3p   --image_size 256   --labeled_percentage 0.1   --num_epochs 25   --batch_size 4   --learning_rate 1e-4
 ```
 
-Or use the main training script:
-
-```bash
-python train.py   --data_path ./dataset/ISIC/   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
-```
-
-### 6.2 Train on Kvasir-CVC
-
-```bash
-python train_kvasir_cvc.py   --image_root ./dataset/TrainDataset_cvc_kvasir/image/   --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/   --backbone DeepLabv3p   --image_size 256   --labeled_percentage 0.15   --num_epochs 25   --batch_size 4   --learning_rate 5e-4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
-```
-
-### 6.3 Train on 3D LA
-
-```bash
-python train_3d.py   --data_path ./dataset/LA/   --backbone VNet   --labeled_percentage 0.1   --num_epochs 1000   --batch_size 4   --learning_rate 1e-4
-```
-
-### 6.4 Run Mean Teacher Training
+### 5.4 Run Mean Teacher Training
 
 ```bash
 python train_meanteacher.py   --data_path ./dataset/ISIC/   --backbone DeepLabv3p   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4
 ```
 
+### 5.5 Run Kvasir-CVC Training
+
+```bash
+python train_kvasir_cvc.py   --image_root ./dataset/TrainDataset_cvc_kvasir/image/   --gt_root ./dataset/TrainDataset_cvc_kvasir/mask/   --backbone DeepLabv3p   --image_size 256   --labeled_percentage 0.15   --num_epochs 25   --batch_size 4   --learning_rate 5e-4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
+```
+
+### 5.6 Run 3D Training
+
+```bash
+python train_3d.py   --data_path ./dataset/LA/   --backbone VNet   --labeled_percentage 0.1   --num_epochs 1000   --batch_size 4   --learning_rate 1e-4
+```
+
 ---
 
-## 7. Common Parameters
+## 6. Common Parameters
 
 | Parameter | Default Value | Description |
 |---|---:|---|
 | `--seed` | `1` | Random seed. |
-| `--project` | `./runs/UCMT` | Path for saving experiment results. |
-| `--backbone` | `DeepLabv3p` / `VNet` | Segmentation backbone. |
-| `--data_path` | `YOUR_DATA_PATH` | Path to the ISIC or 3D dataset. |
-| `--image_root` | `YOUR_DATA_PATH` | Image path for Kvasir-CVC. |
-| `--gt_root` | `YOUR_DATA_PATH` | Ground-truth mask path for Kvasir-CVC. |
+| `--project` | `./runs/UCMT` | Directory for saving experiment results. |
+| `--backbone` | `DeepLabv3p` / `UNet` / `VNet` | Segmentation backbone. |
+| `--data_path` | `YOUR_DATA_PATH` | Dataset path for ISIC-style or 3D datasets. |
+| `--image_root` | `YOUR_DATA_PATH` | Image path for Kvasir-CVC-style datasets. |
+| `--gt_root` | `YOUR_DATA_PATH` | Ground-truth mask path for Kvasir-CVC-style datasets. |
 | `--image_size` | `256` or `[80,112,112]` | Input image or volume size. |
-| `--labeled_percentage` | `0.05`, `0.1`, `0.15`, `0.3` | Percentage of labeled data. |
+| `--labeled_percentage` | `0.05`, `0.1`, `0.15`, `0.3` | Percentage of labeled data used in semi-supervised training. |
 | `--is_cutmix` | `False` | Whether to enable CutMix / BoxMask. |
 | `--mix_prob` | `0.5` | Probability for amplitude mixing or augmentation. |
 | `--topk` | `1` or `2` | Top-k selection setting. |
 | `--num_epochs` | `25`, `50`, `1000` | Number of training epochs. |
 | `--batch_size` | `4` | Batch size. |
-| `--num_workers` | `2` | Number of DataLoader workers. |
-| `--in_channels` | `3` or `1` | Input channels. 2D RGB images use 3 channels; 3D volumes usually use 1 channel. |
+| `--num_workers` | `2` | Number of workers used by DataLoader. |
+| `--in_channels` | `3` or `1` | Number of input channels. 2D RGB images use 3 channels; 3D volumes usually use 1 channel. |
 | `--num_classes` | `2` | Number of segmentation classes. |
 | `--pretrained` | `True` | Whether to use pretrained weights. |
 | `--learning_rate` | `1e-4` or `5e-4` | Learning rate. |
@@ -279,73 +250,70 @@ python train_meanteacher.py   --data_path ./dataset/ISIC/   --backbone DeepLabv3
 
 ---
 
-## 8. Training Pipeline
+## 7. Training Pipeline
 
-The general training pipeline is:
+The general training process is:
 
 1. Parse command-line arguments;
 2. Set the random seed;
-3. Create experiment directories;
-4. Load training and validation datasets;
+3. Create the experiment output folder;
+4. Load the training and validation datasets;
 5. Split the training data into labeled and unlabeled subsets according to `labeled_percentage`;
-6. Repeat the labeled subset so that its length is close to or equal to the full training set;
+6. Repeat the labeled subset to balance the number of labeled and unlabeled samples;
 7. Build DataLoaders;
 8. Initialize segmentation models;
-9. Define Dice / DSC loss functions;
-10. Define optimizers such as AdamW or SGD;
-11. Train with supervised loss, unsupervised consistency loss, pseudo-label loss, or DCT branch loss;
-12. Record training logs using TensorBoard and log files;
+9. Define the segmentation loss, such as Dice / DSC loss;
+10. Define the optimizer, such as AdamW or SGD;
+11. Train the model using supervised loss, unsupervised consistency loss, pseudo-label loss, or DCT-related loss;
+12. Record logs using TensorBoard and log files;
 13. Save model checkpoints.
 
 ---
 
-## 9. Output Results
+## 8. Output Results
 
-By default, training results are saved in:
+Training results are saved under the folder specified by `--project`.
+
+By default, the output directory is usually similar to:
 
 ```text
 runs/UCMT_<backbone>_label_<labeled_percentage>/
 ```
 
-The directory usually contains:
+For example:
 
 ```text
-runs/UCMT_DeepLabv3p_label_0.1/
-├── train_val.log
-├── tensorboardMayxx_xx-xx-xx/
-└── weights/
-    ├── best.pth
-    ├── last.pth
-    ├── model1_best.pth
-    ├── model2_best.pth
-    ├── model3_best.pth
-    ├── model1_last.pth
-    ├── model2_last.pth
-    └── model3_last.pth
+runs/UCMT_DeepLabv3p_label_0.05/
 ```
 
-Different scripts may save checkpoints with different names, such as:
+The output folder may contain:
 
-- `best.pth`
-- `last.pth`
-- `model1_best.pth`
-- `model2_best.pth`
-- `model3_best.pth`
-- `model1_last.pth`
-- `model2_last.pth`
-- `model3_last.pth`
+```text
+train_val.log
+tensorboard*/
+weights/
+```
+
+The `weights/` folder may contain checkpoint files such as:
+
+```text
+best.pth
+last.pth
+model1_best.pth
+model2_best.pth
+model3_best.pth
+model1_last.pth
+model2_last.pth
+model3_last.pth
+```
+
+Different scripts may use different checkpoint names.
 
 ---
 
-## 10. View Logs with TensorBoard
+## 9. TensorBoard
 
-During training, the scripts create a TensorBoard log directory:
-
-```text
-runs/UCMT_xxx/tensorboardxxx/
-```
-
-Run:
+To view training logs, run:
 
 ```bash
 tensorboard --logdir ./runs
@@ -359,9 +327,9 @@ http://localhost:6006
 
 ---
 
-## 11. Important Notes
+## 10. Important Notes
 
-### 11.1 GPU Settings
+### 10.1 GPU Setting
 
 Several scripts contain:
 
@@ -369,27 +337,27 @@ Several scripts contain:
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 ```
 
-To use another GPU, modify it, for example:
+To use another GPU, change it manually:
 
 ```python
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 ```
 
-Alternatively, remove that line and specify the GPU from the command line:
+Or specify the GPU from the command line:
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python train.py
+CUDA_VISIBLE_DEVICES=0 python train1_UADC.py
 ```
 
-### 11.2 Configuration File Paths
+### 10.2 Configuration File Paths
 
-Some scripts contain local absolute paths, for example:
+Some scripts may contain local absolute paths, such as:
 
 ```text
 /home/li/桌面/UCMT-main/configs/pascal/segformerb2_4x4.yaml
 ```
 
-Replace them with relative paths:
+Replace them with paths that exist in the current folder, for example:
 
 ```bash
 --config ./configs/pascal/segformerb2_4x4.yaml
@@ -397,9 +365,9 @@ Replace them with relative paths:
 --config3 ./configs/pascal/r50_4x4.yaml
 ```
 
-### 11.3 Dataset Classes
+### 10.3 Dataset Class Matching
 
-Different scripts call different dataset classes:
+Different scripts use different dataset classes:
 
 ```text
 ISICDataset      -> data/dataset.py
@@ -409,11 +377,11 @@ SemiDataset      -> dataset/semi.py
 SemiDatasetDCT   -> dataset/semi_dct.py
 ```
 
-Make sure dataset paths, file names, and image formats match the corresponding Dataset implementation.
+Make sure that the dataset path, file names, and image formats match the corresponding Dataset implementation.
 
-### 11.4 Labeled Data Percentage
+### 10.4 Labeled Data Percentage
 
-`labeled_percentage` controls the proportion of labeled samples used in semi-supervised training.
+The parameter `labeled_percentage` controls how much labeled data is used.
 
 For example:
 
@@ -421,22 +389,22 @@ For example:
 --labeled_percentage 0.05
 ```
 
-This means that only 5% of the training data is used as labeled data, while the remaining data is used as unlabeled data.
+means that 5% of the training data is used as labeled data, while the remaining data is treated as unlabeled data.
 
 ---
 
-## 12. Example Experiment Commands
+## 11. Example Experiments
 
-### ISIC with 5% Labels
+### UDAC with 5% Labels
 
 ```bash
-python train.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4   --learning_rate 5e-4   --config ./configs/pascal/segformerb2_4x4.yaml   --config2 ./configs/pascal/r50_dct_4x4.yaml   --config3 ./configs/pascal/r50_4x4.yaml
+python train1_UADC.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.05   --num_epochs 25   --batch_size 4   --learning_rate 5e-4
 ```
 
-### ISIC with 10% Labels
+### UDAC with 10% Labels
 
 ```bash
-python train_ucmt_isic.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.1   --num_epochs 25   --batch_size 4
+python train1_UADC.py   --data_path ./dataset/ISIC/   --labeled_percentage 0.1   --num_epochs 25   --batch_size 4   --learning_rate 5e-4
 ```
 
 ### Kvasir-CVC with 15% Labels
@@ -453,21 +421,21 @@ python train_3d.py   --data_path ./dataset/LA/   --labeled_percentage 0.1   --nu
 
 ---
 
-## 13. FAQ
+## 12. FAQ
 
-### Q1: What should I do if the configuration file cannot be found?
+### Q1: What should I do if the dataset cannot be found?
 
-Check whether `--config`, `--config2`, and `--config3` point to valid paths on your machine. Relative paths are recommended.
-
-### Q2: What should I do if the dataset cannot be found?
-
-Check:
+Check the following:
 
 - Whether `--data_path` is correct;
 - Whether `--image_root` points to the image folder;
 - Whether `--gt_root` points to the mask folder;
-- Whether image and mask file names correspond to each other;
-- Whether the folder names match the requirements in the Dataset class.
+- Whether image and mask file names match;
+- Whether the folder names match the Dataset class.
+
+### Q2: What should I do if the configuration file cannot be found?
+
+Check whether `--config`, `--config2`, and `--config3` point to existing YAML files in the current folder.
 
 ### Q3: What should I do if GPU memory is insufficient?
 
@@ -483,7 +451,7 @@ Or reduce the input image size:
 --image_size 224
 ```
 
-For 3D tasks, reduce the volume size:
+For 3D tasks, reduce the input volume size:
 
 ```bash
 --image_size [64,96,96]
@@ -494,10 +462,10 @@ For 3D tasks, reduce the volume size:
 Use:
 
 ```bash
-CUDA_VISIBLE_DEVICES=1 python train.py
+CUDA_VISIBLE_DEVICES=1 python train1_UADC.py
 ```
 
-Or modify:
+or modify the following line in the script:
 
 ```python
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -505,7 +473,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 ### Q5: How can I resume training?
 
-The current scripts mainly train from scratch and save checkpoints. To resume training, add code similar to:
+The current scripts mainly train from scratch and save checkpoints. To resume training, add checkpoint loading code, for example:
 
 ```python
 checkpoint = torch.load("./runs/xxx/weights/last.pth")
@@ -516,21 +484,21 @@ Then continue training.
 
 ---
 
-## 14. Citation / Acknowledgement
+## 13. Citation / Acknowledgement
 
-If this project is used for paper experiments, please describe the semi-supervised medical image segmentation framework in your paper or report. Also specify the dataset, labeled data percentage, network architecture, and training configuration used in the experiments.
+If this project is used in academic experiments, please clearly describe the UDAC semi-supervised medical image segmentation framework, the dataset used, the labeled data percentage, the network architecture, and the training configuration.
 
 ---
 
-## 15. TODO
+## 14. TODO
 
 Future improvements may include:
 
 - Add a unified `requirements.txt`;
-- Add a unified `config.yaml`;
+- Add a unified configuration file;
 - Merge duplicate training scripts;
-- Add a testing script `test.py`;
-- Add an inference script `inference.py`;
-- Add a dataset splitting script;
-- Add automatic training metric saving as CSV files;
+- Add a testing script;
+- Add an inference script;
+- Add dataset splitting scripts;
+- Add automatic metric saving to CSV files;
 - Rename `train_piture.py` to `train_picture.py`.
